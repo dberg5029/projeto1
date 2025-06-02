@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Painel de Tarefas{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Painel de Tarefas</h2>
+    {% if stats %}
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">Total de Tarefas</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ stats.total }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Concluídas</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ stats.concluidas }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-header">Pendentes</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ stats.pendentes }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card text-dark bg-info mb-3">
+                <div class="card-header">Em Andamento</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ stats.em_andamento }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-header">Atrasadas</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ stats.atrasadas }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <h3 class="mt-5 mb-3">Lista de Tarefas</h3>
+    {% if tarefas %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Título</th>
+                    <th scope="col">Descrição</th>
+                    <th scope="col">Designado Para</th>
+                    <th scope="col">Prazo</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Prioridade</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tarefa in tarefas %}
+                <tr>
+                    <th scope="row">{{ tarefa.id }}</th>
+                    <td>{{ tarefa.titulo }}</td>
+                    <td>{{ tarefa.descricao }}</td>
+                    <td>{{ tarefa.designado.nome if tarefa.designado else "N/A" }}</td>
+                    <td>{{ tarefa.prazo.strftime("%d/%m/%Y") if tarefa.prazo else "N/A" }}</td>
+                    <td>
+                        <span class="badge 
+                        {% if tarefa.status == 'concluida' %}bg-success
+                        {% elif tarefa.status == 'pendente' %}bg-warning text-dark
+                        {% elif tarefa.status == 'em andamento' %}bg-info text-dark
+                        {% elif tarefa.status == 'atrasada' %}bg-danger
+                        {% else %}bg-secondary
+                        {% endif %}">{{ tarefa.status.capitalize() }}</span>
+                    </td>
+                    <td>
+                        <span class="badge 
+                        {% if tarefa.prioridade == 'alta' %}bg-danger
+                        {% elif tarefa.prioridade == 'media' %}bg-warning text-dark
+                        {% elif tarefa.prioridade == 'baixa' %}bg-secondary
+                        {% else %}bg-light text-dark
+                        {% endif %}">{{ tarefa.prioridade.capitalize() }}</span>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('tarefas.visualizar', tarefa_id=tarefa.id) }}" class="btn btn-sm btn-outline-primary">Ver</a>
+                        {% if current_user.tipo_usuario == 'gestor' %}
+                            <a href="{{ url_for('tarefas.editar', tarefa_id=tarefa.id) }}" class="btn btn-sm btn-outline-warning">Editar</a>
+                            <a href="{{ url_for('tarefas.excluir', tarefa_id=tarefa.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Tem certeza que deseja excluir esta tarefa?')">Excluir</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nenhuma tarefa encontrada.</p>
+    {% endif %}
+    {% if current_user.tipo_usuario == 'gestor' %}
+        <a href="{{ url_for('tarefas.criar') }}" class="btn btn-success mt-3">Criar Nova Tarefa</a>
+    {% endif %}
+</div>
+{% endblock %}

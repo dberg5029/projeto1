@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Página Inicial{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h1>Bem-vindo ao Software Quântico</h1>
+    <p>Este é o sistema de gerenciamento de tarefas e documentos.</p>
+    {% if current_user.is_authenticated %}
+        <p>Você está logado como {{ current_user.nome }} ({{ current_user.tipo_usuario_display }}).</p>
+        <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary">Ir para o Painel</a>
+        <a href="{{ url_for('usuarios.logout') }}" class="btn btn-danger">Sair</a>
+    {% else %}
+        <p>Por favor, <a href="{{ url_for('usuarios.login') }}">faça login</a> ou <a href="{{ url_for('usuarios.register') }}">registre-se</a> para continuar.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Editar Tarefa #{{ tarefa.id }}{% endblock %}
+{% block content %}
+<div class="container mt-3">
+    <div class="card border-0 shadow">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Editar Tarefa #{{ tarefa.id }}</h4>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        {{ form.titulo.label(class="form-label") }}
+                        {{ form.titulo(class="form-control") }}
+                        {% for error in form.titulo.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    <!-- Outros campos do formulário -->
+                </div>
+
+                <div class="d-flex justify-content-end mt-4">
+                    <a href="{{ url_for('tarefas.listar') }}" class="btn btn-outline-secondary me-2">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle"></i> Salvar Alterações
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+✅ Em seguida:
+Depois que o ambiente estiver ativado, instale os pacotes com:
+
+bash
+Copiar
+Editar
+pip install -r requirements.txt
+E rode o sistema:
+
+bash
+Copiar  executar
+
+python app.py
+
+
+
+
+
+
+
+
+Você disse:
+(venv) C:\projeto1>
+(venv) C:\projeto1>python app.py
+ * Serving Flask app 'src'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.100.32:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 105-830-703
+
+
+O ChatGPT disse:
+Perfeito! 🎉 Seu sistema Flask está rodando com sucesso em ambiente local!
+
+✅ Agora você pode acessar:
+http://127.0.0.1:5000 (local)
+
+Ou http://192.168.100.32:5000 (outros dispositivos da sua rede, como celular)
+

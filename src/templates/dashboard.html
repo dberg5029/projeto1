@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>Painel de Tarefas</h2>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">Total de Tarefas</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ stats.total }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Tarefas Concluídas</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ stats.concluidas }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-header">Tarefas Pendentes</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ stats.pendentes }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-header">Tarefas em Andamento</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ stats.em_andamento }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-header">Tarefas Atrasadas</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ stats.atrasadas }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="mt-4">Lista de Tarefas</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Título</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Setor</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Designado</th>
+                <th scope="col">Prazo</th>
+                <th scope="col">Status</th>
+                <th scope="col">Prioridade</th>
+                <th scope="col">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tarefa in tarefas %}
+            <tr>
+                <th scope="row">{{ tarefa.id }}</th>
+                <td>{{ tarefa.titulo }}</td>
+                <td>{{ tarefa.descricao|default('N/A') }}</td>
+                <td>{{ tarefa.setor|default('N/A') }}</td>
+                <td>{{ tarefa.cliente|default('N/A') }}</td>
+                <td>{{ tarefa.tipo_tarefa|default('N/A') }}</td>
+                <td>{{ tarefa.designado.nome if tarefa.designado else 'N/A' }}</td>
+                <td>{{ tarefa.prazo.strftime('%d/%m/%Y') if tarefa.prazo else 'N/A' }}</td>
+                <td>
+                    <span class="badge {{
+                        'bg-warning' if tarefa.status.name == 'pendente' else
+                        'bg-info' if tarefa.status.name == 'em_andamento' else
+                        'bg-success' if tarefa.status.name == 'concluida' else
+                        'bg-danger' if tarefa.status.name == 'atrasada' else
+                        'bg-secondary'
+                    }}">{{ tarefa.status.value }}</span>
+                </td>
+                <td>{{ tarefa.prioridade.value }}</td>
+                <td>
+                    <a href="{{ url_for('tarefas.visualizar', id=tarefa.id) }}" class="btn btn-info btn-sm">Ver</a>
+                    {% if current_user.tipo_usuario in ['admin', 'gestor'] %}
+                    <a href="{{ url_for('tarefas.editar', id=tarefa.id) }}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="{{ url_for('tarefas.excluir', id=tarefa.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir esta tarefa?')">Excluir</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
